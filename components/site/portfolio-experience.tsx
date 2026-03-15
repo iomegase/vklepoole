@@ -10,6 +10,7 @@ import { EditLink } from "@/components/site/edit-link";
 import { GalleryModal } from "@/components/site/gallery-modal";
 import { PageBackdrop } from "@/components/site/portfolio/page-backdrop";
 import { PageHero } from "@/components/site/portfolio/page-hero";
+import { VideoCinematicLayout } from "@/components/site/portfolio/video-cinematic-layout";
 import {
   getGalleryHint,
   pageVisualMap,
@@ -42,6 +43,7 @@ export function PortfolioExperience({
   const [menuOpen, setMenuOpen] = useState(false);
   const [galleryOpen, setGalleryOpen] = useState(false);
   const [showPreloader, setShowPreloader] = useState(true);
+  const [selectedVideoIndex, setSelectedVideoIndex] = useState(0);
   const [isNavigating, setIsNavigating] = useState(false);
 
   const currentPage = site.pages.find((page) => page.key === currentPageKey) ?? site.pages[0];
@@ -86,6 +88,7 @@ export function PortfolioExperience({
       setGalleryOpen(false);
       setMenuOpen(false);
       setIsNavigating(false);
+      setSelectedVideoIndex(0);
     });
 
     return () => window.cancelAnimationFrame(frame);
@@ -152,7 +155,7 @@ export function PortfolioExperience({
                   visualMotion={visualMotion}
                 />
 
-                <div className="relative z-10 mx-4 my-4 min-h-[calc(100vh-2rem)] rounded-3xl px-4 pb-6 pt-4 sm:mx-8 sm:my-8 sm:min-h-[calc(100vh-4rem)] sm:px-8 sm:pb-8 sm:pt-6 lg:mx-12 lg:my-12 lg:min-h-[calc(100vh-6rem)] lg:px-12 lg:pb-10 lg:pt-6">
+                <div className="relative z-10 m-4 min-h-[calc(100vh-2rem)] rounded-3xl px-4 pt-4 pb-6 shadow-lg sm:m-8 sm:min-h-[calc(100vh-4rem)] sm:px-8 sm:pt-6 sm:pb-8 lg:m-12 lg:min-h-[calc(100vh-6rem)] lg:px-12 lg:pt-6 lg:pb-10">
                   <div className="flex min-h-full flex-col">
                     <header className="z-30 flex items-center justify-between gap-3">
                       <div className="flex min-w-0 items-start gap-3">
@@ -199,6 +202,17 @@ export function PortfolioExperience({
                       </div>
                     </header>
 
+                    {currentPageKey === "video" ? (
+                      <div className="mt-6 flex h-full flex-1">
+                        <VideoCinematicLayout
+                          currentGallery={currentGallery}
+                          currentPage={contentPage}
+                          onOpenGallery={() => setGalleryOpen(true)}
+                          onSelectIndex={setSelectedVideoIndex}
+                          selectedIndex={selectedVideoIndex}
+                        />
+                      </div>
+                    ) : (
                     <div className="mt-6 grid h-full flex-1 grid-cols-1 gap-8 lg:grid-cols-[minmax(0,0.95fr)_minmax(340px,0.95fr)] lg:gap-12">
                   <div className="flex min-h-0 min-w-0 flex-col justify-center gap-8">
                     <div className="space-y-6">
@@ -213,7 +227,7 @@ export function PortfolioExperience({
 
                       <div className="space-y-4">
                         <p className="text-[0.68rem] uppercase tracking-[0.34em] text-zinc-500">{pageVisual.eyebrow}</p>
-                        <h1 className="max-w-[11ch] wrap-break-word text-7xl leading-[0.92] tracking-[-0.04em] text-zinc-900 ">
+                        <h1 className="max-w-[11ch] break-words text-7xl leading-[0.92] tracking-[-0.04em] text-zinc-900 ">
                           {contentPage.title}
                         </h1>
                         
@@ -275,6 +289,7 @@ export function PortfolioExperience({
                     />
                   </div>
                 </div>
+                    )}
                   </div>
                 </div>
               </motion.main>
